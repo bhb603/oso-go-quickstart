@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: oso-go-quickstart
+  name: oso-go-quickstart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oso-go-quickstart
+  template:
+    metadata:
+      labels:
+        app: oso-go-quickstart
+    spec:
+      containers:
+      - image: bhb603/oso-go-quickstart:latest
+        name: oso-go-quickstart
+        ports:
+        - containerPort: 5050
+          name: http
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 100m
+            memory: 256Mi
+          requests:
+            cpu: 50m
+            memory: 128Mi
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oso-go-quickstart
+spec:
+  ports:
+  - name: http
+    port: 5050
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: oso-go-quickstart
+  type: ClusterIP

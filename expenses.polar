@@ -1,1 +1,2 @@
-# TODO: Add some rules!
+allow(actor: String, "GET", expense: Expense) if
+    expense.SubmittedBy = actor;
