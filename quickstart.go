@@ -28,6 +28,13 @@ func (u User) Lt(other interfaces.Comparer) bool {
 	return false
 }
 
+func (u User) Roles() []string {
+	if u == "admin@example.com" {
+		return []string{"admin"}
+	}
+	return []string{"user"}
+}
+
 type Expense struct {
 	Amount      int
 	Description string
@@ -51,6 +58,10 @@ func notFound(w http.ResponseWriter) {
 
 func (a *App) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.Path, "/")
+	if len(parts) < 3 {
+		notFound(w)
+		return
+	}
 	resource := parts[1]
 	id := parts[2]
 	if resource == "expenses" {
